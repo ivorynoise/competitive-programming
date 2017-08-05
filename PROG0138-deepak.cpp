@@ -19,7 +19,7 @@ void prob(){
 		--fav;
 
 		if (i % 5 == 0){
-			printf("%d %0.12f\n", i, 1 - pDiff);
+			printf("%2d %13.12f\n", i, 1 - pDiff);
 		}
 
 	}
