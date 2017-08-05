@@ -1,9 +1,9 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef vector<vector<int> > vii;
-typedef vector<int> vi;
 typedef long long int ll;
+typedef vector<vector<ll> > vii;
+typedef vector<ll> vi;
 const int m = (int)1e9;
 int k;
 vi b;
@@ -41,20 +41,27 @@ int sol(int n){
 	if (n <= k) return b[n - 1];
 	
 	//setting transformation matrix
+	reverse(c.begin(), c.end());
+
 	for(int r = 0; r < k; ++r){
-		for(int c = 0; c < k; ++c){
-			if (r == 0) t[r][c] = b[c];
-			else if (r == c + 1) t[r][c] = 1;
-			else t[r][c] = 0;
+		for(int col = 0; col < k; ++col){
+			//Make sure that T.Fn-1 = Fn
+			//no skipping should be there else formula needs to be modified
+
+			t[r][col] = 0;
+			if (col == r + 1) t[r][col] = 1;
+			//last row
+			if (r == k - 1) t[r][col] = c[col];
+
 		}
 	}
 
 	//setting f
 	vi f(k);
-	copy(c.rbegin(), c.rend(), f.begin());
+	copy(b.begin(), b.end(), f.begin());
 
 	//compute T^n
-	int exp = n;
+	int exp = n-1;
 	vii tn = pow(t, exp);
 
 	ll ans = 0;
