@@ -3,6 +3,7 @@
 #include <stack>
 using namespace std;
 
+//maintain a stack to store the order of reaching the points
 stack<int> st;
 class graph{
 public:
@@ -16,7 +17,7 @@ public:
 	void addEdge(int src,int dest){
 		adjList[src].push_back(dest);
 	}
-
+	//just for debugging process
 	void printGraph(){
 		for(int i=0;i<nv;i++){
 			cout<<i<<" : ";
@@ -46,6 +47,7 @@ public:
 			}
 		}
 	}
+	//the nodes visited will lie in a single strongly connected component
 	void PrintStronglyConnected(int src,bool visited[]){
 		visited[src]=true;
 		cout<<src<<" ";
@@ -55,7 +57,8 @@ public:
 				PrintStronglyConnected(child,visited);
 		}
 	}
-
+	//we keep popping elements of the stack and if the element not visited,
+	//it belongs to a new strongly connected component
 	void getConnectedComponents(){
 		bool visited[nv+1]={};
 		while(!st.empty()){
@@ -81,6 +84,12 @@ int main(){
 	}
 
 	g.dfs_helper();
+	//we first do a conventional dfs on the graph
+	//and then reverse all the edges
+
+	//after reversing the edges, we visit the nodes from the stack
+	//each unvisited node is gonna be a part of a new
+	//strongly connected component
 	graph transposed(nv);
 	for(int i=0;i<nv;i++){
 		for(int j=0;j<g.adjList[i].size();i++){
@@ -88,9 +97,7 @@ int main(){
 			transposed.addEdge(child,i);
 		}
 	}
-
 	transposed.getConnectedComponents();
-
 	// transposed.printGraph();
 	return 0;
 }
