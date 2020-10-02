@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+using namespace std;
+
+#define F first
+#define S second
+#define pb push_back
+#define fr(it, a, b) \
+  for (int it = (a); it < (b); it++)
+#define sz(c) (int)c.size()
+#define len(c) (int)c.length()
+#define all(c) c.begin(), c.end()
+#define vint vector<int>
+typedef pair<int, int> pi;
+
+int32_t main()
+{
+  // freopen("input.txt", "r", stdin);
+  // freopen("output.txt", "w", stdout);
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+  int n, k, now = 0, ans = 2e9;
+  cin >> n >> k;
+  vint a(n);
+  vector<deque<pi>> ve(2);
+  fr(i, 0, n)
+  {
+    cin >> a[i];
+  }
+  fr(i, 0, k)
+  {
+    while (!ve[now].empty() && ve[now].back().F <= a[i])
+    {
+      ve[now].pop_back();
+    }
+    ve[now].pb({a[i], i});
+    now = (now + 1) % 2;
+  }
+  ans = min(ans, min(ve[0].front().F, ve[1].front().F));
+  fr(i, k, n)
+  {
+    while (!ve[now].empty() && ve[now].back().F <= a[i])
+    {
+      ve[now].pop_back();
+    }
+    ve[now].pb({a[i], i});
+    now = (now + 1) % 2;
+    if (k % 2 && ve[now].front().second == i - k)
+    {
+      ve[now].pop_front();
+    }
+    else if (k % 2 == 0 && ve[(now + 1) % 2].front().second == i - k)
+    {
+      ve[(now + 1) % 2].pop_front();
+    }
+    ans = min(ans, min(ve[0].front().F, ve[1].front().F));
+  }
+  cout << ans << "\n";
+  return 0;
+}
